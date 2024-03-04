@@ -13,12 +13,17 @@ app.get("/", function (req, res) {
   res.sendFile(process.cwd() + "/views/index.html");
 });
 
-app.post("/api/fileanalyse", upload.single("upfile"), (req, res) => {
-  res.json({
-    name: req.file.originalname,
-    type: req.file.mimetype,
-    size: req.file.size,
-  });
+
+app.post("/api/fileanalyse", upload.single("upfile"), async (req, res) => {
+  try {
+    res.json({
+      name: req.file.originalname,
+      type: req.file.mimetype,
+      size: req.file.size,
+    });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
 });
 
 const port = process.env.PORT || 3000;
